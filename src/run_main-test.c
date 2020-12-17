@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "pstring.h"
 
-void run_func(int opt, Pstring* p1, Pstring* p2);
+void run_func(int opt, Pstring* p1,Pstring* p2);
 
 void run_main() {
 
