@@ -4,11 +4,18 @@
 pFormat50or60:  # the string format for printf in opt 50 or 60 in the switch.
 .string "first pstring length: %d, second pstring length: %d\n"
 
-sChar:      # the string format for scanf to read single char.
+sChar:      	# the string format for scanf to read single char.
 .string " %c"
+
+sInt:			# the string format for scanf to read single char.
+.string " %d"
 
 pFormat52:      # the string format for printf in opt 52 in the switch.
 .string "old char: %c, new char: %c, first string: %s, second string: %s\n"
+
+pFormat53:      # the string format for printf in opt 53 in the switch.
+.string "%d,%d\n"
+
 options:    # switch(opt)
 .quad   opt50or60   # Case opt==50.
 .quad   done        # Case opt==51.
@@ -77,6 +84,23 @@ run_func:
 
         jmp done    # Goto done
     opt53:
+	# get & save the first int
+        call    read_int
+        pushq   %rax
+
+        # get & save the second int
+        call    read_int
+        pushq   %rax
+
+        # setting vars to printf:
+        movq    $pFormat53, %rdi # setting the format.
+        popq    %rdx    # get the second int
+        popq    %rsi    # get the first int
+
+        # calling printf
+        xorq    %rax, %rax # initializing %rax to 0.
+        call    printf
+
         jmp done    # Goto done
     opt54:
         jmp done    # Goto done
@@ -101,7 +125,7 @@ read_char:
 	continue1:
     
 	movq    %rax, %r12		# saving how mach we need to return.
-    leaq    (%rsp), %rsi
+    leaq    (%rsp), %rsi	# were to put the read data.
 
 	movq    $sChar, %rdi    # setting the format.
 
@@ -111,6 +135,38 @@ read_char:
 
     # get the char:
     movsbl  (%rsp), %eax
+
+	# delete the data from the stack
+    addq    %r12, %rsp
+
+	# restore callee save we have used.
+	popq	%r12
+    ret
+
+    .type   read_char, @function
+read_int:
+	# save callee save we would use
+	pushq	%r12
+    # setting vars to scanf:
+    
+	movq	$4, %rdi		# int needs 4 byte.
+	movq    $continue2, %rsi
+	jmp    round_rsp		# adding place to data.
+	continue2:
+    
+	movq    %rax, %r12		# saving how mach we need to return.
+    leaq    (%rsp), %rsi	# were to put the read data.
+
+	movq    $sInt, %rdi    # setting the format.
+
+    # calling scanf for first char
+    xorq    %rax, %rax # initializing %rax to 0.
+    call    scanf
+
+    # get the int:
+    movslq  (%rsp), %rax
+
+	# delete the data from the stack
     addq    %r12, %rsp
 
 	# restore callee save we have used.
