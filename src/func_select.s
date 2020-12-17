@@ -91,15 +91,19 @@ run_func:
 
     .type   read_char, @function
 read_char:
+	# save callee save we would use
 	pushq	%r12
     # setting vars to scanf:
-    movq    $sChar, %rdi    # setting the format.
     
-	jmp    round_rsp       # adding place to data.
-	continue:
+	movq	$1, %rdi		# char needs 1 byte.
+	movq    $continue1, %rsi
+	jmp    round_rsp		# adding place to data.
+	continue1:
     
-	movq    %rax, %r12     # saving how mach we need to return.
+	movq    %rax, %r12		# saving how mach we need to return.
     leaq    (%rsp), %rsi
+
+	movq    $sChar, %rdi    # setting the format.
 
     # calling scanf for first char
     xorq    %rax, %rax # initializing %rax to 0.
@@ -108,12 +112,14 @@ read_char:
     # get the char:
     movsbl  (%rsp), %eax
     addq    %r12, %rsp
+
+	# restore callee save we have used.
 	popq	%r12
     ret
 
 round_rsp:  # rounds %rsp to the next 16th mult.
 	# first we want the next rsp so we dec 1:
-	dec %rsp
+	subq %rdi, %rsp
 
     # compute modulo a power of two,
 	# using bitwise AND:
@@ -123,7 +129,7 @@ round_rsp:  # rounds %rsp to the next 16th mult.
 	andq %rsp, %rax
     subq %rax, %rsp
 
-    inc %rax      # we add how match we add at the first line.
-    jmp continue
+    addq %rdi, %rax      # we add how match we add at the first line.
+    jmp *%rsi
 
 
