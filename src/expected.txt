@@ -1,0 +1,163 @@
+**************************start copy from this line**************************
+***basic test:
+first pstring length: 5, second pstring length: 5
+old char: e, new char: z, first string: hzllo, second string: byz
+old char: z, new char: a, first string: hello, second string: bye
+length: 5, string: horld
+length: 5, string: world
+length: 5, string: hE@LO
+length: 5, string: world
+invalid input!
+compare result: -2
+invalid option!
+***test opt 50 & 60:
+opt50or60.1:
+first pstring length: 0, second pstring length: 0
+opt50or60.2:
+first pstring length: 127, second pstring length: 127
+opt50or60.3:
+first pstring length: 1, second pstring length: 1
+opt50or60.4:
+first pstring length: 16, second pstring length: 21
+opt50or60.5:
+first pstring length: 22, second pstring length: 15
+***test opt 52:
+opt52.1:
+old char: a, new char: b, first string: , second string:
+opt52.2:
+old char: a, new char: C, first string: CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCb, second string: CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCb
+opt52.3:
+old char: e, new char: p, first string: p, second string: o
+opt52.4:
+old char: f, new char: %, first string: !@#$%^&*()_+/*-|, second string: a!@#V45ghksi^,k%l#%hj
+opt52.5:
+old char: @, new char: 5, first string: !5#$%dsioa!5#$djk25#$%, second string: a#AD5$ddg#$^%Gb
+opt52.6:
+old char: 5, new char: ., first string: A4.$hH98.., second string: f4.fjk..4.
+***test opt 53:
+opt53.1:
+invalid input!
+length: 0, string:
+length: 0, string:
+opt53.2:
+length: 127, string: ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccd
+length: 127, string: ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccd
+opt53.3:
+length: 1, string: o
+length: 1, string: o
+opt53.4:
+length: 16, string: !@#$%45ghksi^,kf
+length: 21, string: a!@#V45ghksi^,kfl#fhj
+opt53.5:
+length: 22, string: a#AD@$ddga!@#$djk2@#$%
+length: 15, string: a#AD@$ddg#$^%Gb
+opt53.6:
+length: 10, string: A45$hH98.5
+length: 10, string: f45fjk5545
+opt53.7:
+invalid input!
+length: 0, string:
+length: 0, string:
+opt53.8:
+invalid input!
+length: 5, string: asdfg
+length: 3, string: qwe
+opt53.9:
+invalid input!
+length: 8, string: qwertyui
+length: 8, string: 54123698
+opt53.10:
+invalid input!
+length: 8, string: qwertyui
+length: 8, string: 54123698
+***test opt 54:
+opt54.1:
+length: 0, string:
+length: 0, string:
+opt54.2:
+length: 127, string: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB
+length: 127, string: CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCD
+opt54.3:
+length: 1, string: E
+length: 1, string: O
+opt54.4:
+length: 16, string: !@#$%^&*()_+/*-|
+length: 21, string: A!@#v45GHKSI^,KFL#FHJ
+opt54.5:
+length: 22, string: !@#$%DSIOA!@#$DJK2@#$%
+length: 15, string: A#ad@$DDG#$^%gB
+opt54.6:
+length: 26, string: ABCDEFGHIJKLMNOPQRSTUVWXYZ
+length: 26, string: abcdefghijklmnopqrstuvwxyz
+opt54.7:
+length: 26, string: AbCdEfGhIjKlMnOpQrStUvWxYz
+length: 26, string: aBcDeFgHiJkLmNoPqRsTuVwXyZ
+opt54.8:
+length: 52, string: A!#$%^bCdE@#%^&fGhIj#@$%^KlMnOpQ!#$^%$*rStUvW@#%$xYz
+length: 47, string: aB!#%cDeFg!@#@%HiJ!%$kLmNoPqR!$^%$&sTuVw3425XyZ
+***test opt 55:
+opt55.1:
+invalid input!
+compare result: -2
+opt55.2:
+compare result: -1
+opt55.3:
+compare result: -1
+opt55.4:
+compare result: -1
+opt55.5:
+compare result: 1
+opt55.6:
+compare result: 0
+opt55.7:
+compare result: -1
+opt55.8:
+compare result: 1
+opt55.9:
+compare result: 0
+opt55.10:
+compare result: 1
+opt55.11:
+compare result: 1
+opt55.12:
+compare result: -1
+opt55.13:
+compare result: 0
+opt55.14:
+invalid input!
+compare result: -2
+opt55.15:
+invalid input!
+compare result: -2
+opt55.16:
+invalid input!
+compare result: -2
+opt55.17:
+invalid input!
+compare result: -2
+***test other opt:
+otherOpt.1:
+invalid option!
+otherOpt.2:
+invalid option!
+otherOpt.3:
+invalid option!
+otherOpt.4:
+invalid option!
+otherOpt.5:
+invalid option!
+otherOpt.6:
+invalid option!
+otherOpt.7:
+invalid option!
+otherOpt.7:
+invalid option!
+***other tests:
+other.1:
+invalid input!
+length: 50, string: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaab
+length: 50, string: ccccccccccccccccccccccccccccccccccccccccccccccccco
+other.2:
+invalid input!
+compare result: -2
+**************************copy until this line**************************
