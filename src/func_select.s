@@ -14,7 +14,7 @@ pFormat52:      # the string format for printf in opt 52 in the switch.
 .string "old char: %c, new char: %c, first string: %s, second string: %s\n"
 
 pFormat53:      # the string format for printf in opt 53 in the switch.
-.string "%d,%d\n"
+.string "length: %d, string: %s\n"
 
 options:    # switch(opt)
 .quad   opt50or60   # Case opt==50.
@@ -106,19 +106,37 @@ run_func:
 
         jmp done    # Goto done
     opt53:
-	# get & save the first int
+	    # get & save the start index
         call    read_int
         pushq   %rax
 
-        # get & save the second int
+        # get & save the end index
         call    read_int
         pushq   %rax
 
         # setting vars to printf:
-        movq    $pFormat53, %rdi # setting the format.
-        popq    %rdx    # get the second int
-        popq    %rsi    # get the first int
+        movq    %r12, %rdi  # get the dest pstr
+        movq    %r13, %rsi  # get the src pstr
+        popq    %rcx        # get the end index
+        popq    %rdx        # get the start index
+        call    pstrijcpy
 
+        # print the dest
+        movq    %r12, %rdi
+        call    pstrlen     # getting the length of the dest.
+        movq    %rax, %rsi  # getting the length as arg to printf.
+        leaq    1(%r12), %rdx  # getting the string as arg to printf.
+        movq    $pFormat53, %rdi # setting the format.
+        # calling printf
+        xorq    %rax, %rax # initializing %rax to 0.
+        call    printf
+
+        # print the src
+        movq    %r13, %rdi
+        call    pstrlen     # getting the length of the src.
+        movq    %rax, %rsi  # getting the length as arg to printf.
+        leaq    1(%r13), %rdx  # getting the string as arg to printf.
+        movq    $pFormat53, %rdi # setting the format.
         # calling printf
         xorq    %rax, %rax # initializing %rax to 0.
         call    printf
