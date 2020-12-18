@@ -213,6 +213,7 @@ run_func:
 
         ret # returning from the func.
 
+    .globl  read_char # so, the linker would know this func
     .type   read_char, @function
 read_char:
 	# save callee save we would use
@@ -243,7 +244,8 @@ read_char:
 	popq	%r12
     ret
 
-    .type   read_char, @function
+    .globl  read_int # so, the linker would know this func
+    .type   read_int, @function
 read_int:
 	# save callee save we would use
 	pushq	%r12

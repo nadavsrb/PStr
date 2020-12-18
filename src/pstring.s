@@ -75,6 +75,7 @@ pstrijcpy:
 
     invalid1:
     movq    $pInvalid, %rdi # setting the format
+    xorq    %rax, %rax      # initialize %rax to 0 before printf
     call    printf
     lend2:
     movq    %rdi, %rax      # return the dst pstr
@@ -83,6 +84,8 @@ pstrijcpy:
     .globl  swapCase # so, the linker would know this func
     .type   swapCase, @function
 swapCase:
+    pushq   %r14        # save callee
+    pushq   %r15        # save callee
     xorq    %rcx, %rcx  # initialize the counter
 
     call    pstrlen
@@ -124,6 +127,8 @@ swapCase:
         ja     loop3        # if i < n go to loop.
     lend3:
     movq    %rdi, %rax  # return the pstr
+    popq   %r15         # restore callee save
+    popq   %r14         # restore callee save
     ret
 
 .globl  pstrijcmp # so, the linker would know this func
@@ -174,6 +179,7 @@ pstrijcmp:
 
     invalid2:
     movq    $pInvalid, %rdi # setting the format
+    xorq    %rax, %rax      # initialize %rax to 0 before printf
     call    printf
     movq    $-2, %rax       # the invalid status is -2.
     ret
