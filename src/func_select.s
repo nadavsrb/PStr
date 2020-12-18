@@ -53,31 +53,53 @@ run_func:
     # the switch's cases:
     opt50or60:
         # setting vars to printf:
-        movq    $pFormat50or60, %rdi # setting the format.
-        movq    $0, %rsi
-        movq    $0, %rdx
+        movq    %r12, %rdi              # puting the first pstr arg.
+        call    pstrlen                 # getting the length of this pstr.
+        movq    %rax, %rsi
 
+        movq    %r13, %rdi              # puting the second pstr arg.
+        call    pstrlen                 # getting the length of this pstr.
+        movq    %rax, %rdx
+
+        movq    $pFormat50or60, %rdi    # setting the format.
         # calling printf
         xorq    %rax, %rax # initializing %rax to 0.
         call    printf
 
         jmp     done    # Goto done
     opt52:
-        # get & save the first char
+        # get & save the old char
         call    read_char
         pushq   %rax
 
-        # get & save the second char
+        # get & save the new char
         call    read_char
         pushq   %rax
 
-        # setting vars to printf:
+        # change the first pstr
+        movq    %r12, %rdi          # get the pstr
+        movq    (%rsp), %rdx        # get the new char
+        movq    8(%rsp), %rsi       # get the old char
+        call    replaceChar         # doesn't change %rdx, %rsi
+
+        # change the second pstr
+        movq    %r13, %rdi          # get the pstr
+        movq    (%rsp), %rdx        # get the new char
+        movq    8(%rsp), %rsi       # get the old char
+        call    replaceChar
+
+        popq    %rdx            # get the new char
+        popq    %rsi            # get the old char
+
+        # getting only the string (first byte- length)
+        leaq    1(%r12), %rax
+        movq    %rax, %rcx
+
+        # getting only the string (first byte- length)
+        leaq    1(%r13), %rax
+        movq    %rax, %r8
+
         movq    $pFormat52, %rdi # setting the format.
-        popq    %rdx    # get the second char
-        popq    %rsi    # get the first char
-        movq    %r12, %rcx
-        movq    %r13, %r8
-
         # calling printf
         xorq    %rax, %rax # initializing %rax to 0.
         call    printf
