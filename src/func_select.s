@@ -1,6 +1,9 @@
     .section    .rodata
 .align  8   # Align address to multiple of 8
 
+pInvalidOpt:    # the string when invalid option eas chosen.
+.string "invalid option!\n"
+
 pFormat50or60:  # the string format for printf in opt 50 or 60 in the switch.
 .string "first pstring length: %d, second pstring length: %d\n"
 
@@ -13,20 +16,23 @@ sInt:			# the string format for scanf to read single char.
 pFormat52:      # the string format for printf in opt 52 in the switch.
 .string "old char: %c, new char: %c, first string: %s, second string: %s\n"
 
-pFormat53and54:      # the string format for printf in opt 53 and 53 in the switch.
+pFormat53and54: # the string format for printf in opt 53 and 53 in the switch.
 .string "length: %d, string: %s\n"
+
+pFormat55:      # the string format for printf in opt 55 in the switch.
+.string "compare result: %d\n"
 
 options:    # switch(opt)
 .quad   opt50or60   # Case opt==50.
-.quad   done        # Case opt==51.
+.quad   invalidOpt  # Case opt==51.
 .quad   opt52       # Case opt==52.
 .quad   opt53       # Case opt==53.
 .quad   opt54       # Case opt==54.
 .quad   opt55       # Case opt==55.
-.quad   done        # Case opt==56.
-.quad   done        # Case opt==57.
-.quad   done        # Case opt==58.
-.quad   done        # Case opt==59.
+.quad   invalidOpt  # Case opt==56.
+.quad   invalidOpt  # Case opt==57.
+.quad   invalidOpt  # Case opt==58.
+.quad   invalidOpt  # Case opt==59.
 .quad   opt50or60   # Case opt==60.
 
     .text   # beginning of the code:
@@ -47,7 +53,7 @@ run_func:
     # we sub 50 because the first case in the switch is 50.
     leaq    -50(%rdi), %rdi     # Compute opt = opt - 50
     cmpq    $10, %rdi           # Compare opt:10 (the index in options are: 0-10)
-    ja      done                # if 10 < opt (= no index in array), then done
+    ja      invalidOpt          # if 10 < opt (= no index in array), then invalidOpt
     jmp     *options(, %rdi, 8) # else Goto options[8*opt], because every addrres is 8 bytes.
 
     # the switch's cases:
@@ -114,7 +120,6 @@ run_func:
         call    read_int
         pushq   %rax
 
-        # setting vars to printf:
         movq    %r12, %rdi  # get the dest pstr
         movq    %r13, %rsi  # get the src pstr
         popq    %rcx        # get the end index
@@ -173,6 +178,33 @@ run_func:
 
         jmp done    # Goto done
     opt55:
+        # get & save the start index
+        call    read_int
+        pushq   %rax
+
+        # get & save the end index
+        call    read_int
+        pushq   %rax
+        
+        movq    %r12, %rdi  # get pstr1
+        movq    %r13, %rsi  # get pstr2
+        popq    %rcx        # get the end index
+        popq    %rdx        # get the start index
+        call    pstrijcmp
+
+        # print the result:
+        movq    %rax, %rsi          # getting the cmp result as arg to printf.
+        movq    $pFormat55, %rdi    # setting the format.
+        # calling printf
+        xorq    %rax, %rax # initializing %rax to 0.
+        call    printf
+
+        jmp     done
+    invalidOpt:
+        movq    $pInvalidOpt, %rdi # setting the format.
+        # calling printf
+        xorq    %rax, %rax # initializing %rax to 0.
+        call    printf
         # no need jmp because done is right after.
     done:
         # restore callee reg

@@ -2,7 +2,7 @@
 .align  8   # Align address to multiple of 8
 
 pInvalid:
-.string "invalid option!\n"
+.string "invalid input!\n"
 
     .text   # beginning of the code:
     .globl pstrlen # so, the linker would know this func
@@ -124,4 +124,56 @@ swapCase:
         ja     loop3        # if i < n go to loop.
     lend3:
     movq    %rdi, %rax  # return the pstr
+    ret
+
+.globl  pstrijcmp # so, the linker would know this func
+    .type   pstrijcmp, @function
+pstrijcmp:
+    # check valid: 0<=i<=j<lengths
+    cmpb    $0, %dl
+    jl      invalid2    # If 0 > i
+
+    cmpb    %dl, %cl
+    jl      invalid2    # If i > j
+
+    call    pstrlen
+    cmpb    %cl, %al     
+    jle     invalid2   # If pstr1-len <= j
+
+    pushq   %rdi       # saving pstr1
+
+    movq    %rsi, %rdi
+    call    pstrlen
+    popq    %rdi       # restoring pstr1
+    cmpb    %cl, %al     
+    jle     invalid2   # If pstr2 <= j
+
+    # If we got here the input is valid:
+
+    loop4:
+        movb    1(%rsi, %rdx), %r8b     # get the i char, in pstr2.
+
+        cmpb    %r8b, 1(%rdi,%rdx)
+        ja      pstr1Big                # If pstr1 > pstr2 (lexicographic...)
+        jb      pstr2Big                # If pstr1 < pstr2 (lexicographic...)
+
+        inc     %dl                     # ++i
+        cmpb    %dl, %cl
+        jb      equals                   # If j < i, end as equals.
+        jmp     loop4
+    
+    pstr1Big:
+    movq    $1, %rax    # return 1, pstr1 > pstr2 (lexicographic...)
+    ret
+    pstr2Big:
+    movq    $-1, %rax    # return -1, pstr1 < pstr2 (lexicographic...)
+    ret
+    equals:
+    xorq    %rax, %rax  # return 0 for equals.
+    ret
+
+    invalid2:
+    movq    $pInvalid, %rdi # setting the format
+    call    printf
+    movq    $-2, %rax       # the invalid status is -2.
     ret
