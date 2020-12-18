@@ -39,6 +39,7 @@ replaceChar:
         ja      loop1       # if i < n continue to loop.
         # Else break out from loop:
     lend1:
+    movq    %rdi, %rax  # return the pstr
     ret
 
     .globl  pstrijcpy # so, the linker would know this func
@@ -77,4 +78,50 @@ pstrijcpy:
     call    printf
     lend2:
     movq    %rdi, %rax      # return the dst pstr
+    ret
+
+    .globl  swapCase # so, the linker would know this func
+    .type   swapCase, @function
+swapCase:
+    xorq    %rcx, %rcx  # initialize the counter
+
+    call    pstrlen
+    movq    %rax, %rsi  # saving the len
+
+    cmpb    %cl, %sil
+    jle     lend3       # if no i<n go to end.
+
+    # calculating the convert const:
+    movq    $'A', %r15
+    subq    $'a', %r15
+    loop3:
+        # check if the char is between a-b
+        cmpb    $'a', 1(%rdi, %rcx)
+        jb      nextCheck
+        cmpb    $'z', 1(%rdi, %rcx)
+        ja      nextCheck
+        
+        # converting to UPPER CASE:
+        movq    1(%rdi, %rcx), %r14
+        addq    %r15, %r14
+        movq    %r14, 1(%rdi, %rcx)
+
+        jmp     continue3
+        nextCheck:
+        # check if the char is between A-B
+        cmpb    $'A', 1(%rdi, %rcx)
+        jb      continue3
+        cmpb    $'Z', 1(%rdi, %rcx)
+        ja      continue3
+
+        # converting to LOWER CASE:
+        movq    1(%rdi, %rcx), %r14
+        subq    %r15, %r14
+        movq    %r14, 1(%rdi, %rcx)
+        continue3:
+        inc     %cl         # ++i
+        cmpb    %cl, %sil
+        ja     loop3        # if i < n go to loop.
+    lend3:
+    movq    %rdi, %rax  # return the pstr
     ret

@@ -13,7 +13,7 @@ sInt:			# the string format for scanf to read single char.
 pFormat52:      # the string format for printf in opt 52 in the switch.
 .string "old char: %c, new char: %c, first string: %s, second string: %s\n"
 
-pFormat53:      # the string format for printf in opt 53 in the switch.
+pFormat53and54:      # the string format for printf in opt 53 and 53 in the switch.
 .string "length: %d, string: %s\n"
 
 options:    # switch(opt)
@@ -126,7 +126,7 @@ run_func:
         call    pstrlen     # getting the length of the dest.
         movq    %rax, %rsi  # getting the length as arg to printf.
         leaq    1(%r12), %rdx  # getting the string as arg to printf.
-        movq    $pFormat53, %rdi # setting the format.
+        movq    $pFormat53and54, %rdi # setting the format.
         # calling printf
         xorq    %rax, %rax # initializing %rax to 0.
         call    printf
@@ -136,13 +136,41 @@ run_func:
         call    pstrlen     # getting the length of the src.
         movq    %rax, %rsi  # getting the length as arg to printf.
         leaq    1(%r13), %rdx  # getting the string as arg to printf.
-        movq    $pFormat53, %rdi # setting the format.
+        movq    $pFormat53and54, %rdi # setting the format.
         # calling printf
         xorq    %rax, %rax # initializing %rax to 0.
         call    printf
 
         jmp done    # Goto done
     opt54:
+        # swapping the first pstr:
+        movq    %r12, %rdi
+        call    swapCase
+
+        movq    %r12, %rdi
+        call    pstrlen     # gets the string length
+        movq    %rax, %rsi  # put the string length as arg for printf.
+
+        leaq    1(%r12), %rdx  # getting the string as arg to printf.
+        movq    $pFormat53and54, %rdi # setting the format.
+        # calling printf
+        xorq    %rax, %rax # initializing %rax to 0.
+        call    printf
+
+        # swapping the second pstr:
+        movq    %r13, %rdi
+        call    swapCase
+
+        movq    %r13, %rdi
+        call    pstrlen     # gets the string length
+        movq    %rax, %rsi  # put the string length as arg for printf.
+
+        leaq    1(%r13), %rdx  # getting the string as arg to printf.
+        movq    $pFormat53and54, %rdi # setting the format.
+        # calling printf
+        xorq    %rax, %rax # initializing %rax to 0.
+        call    printf
+
         jmp done    # Goto done
     opt55:
         # no need jmp because done is right after.
